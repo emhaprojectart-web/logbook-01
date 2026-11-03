@@ -289,7 +289,9 @@ function filterVerifiedKaruPatientRows(
   startDate?: string,
   endDate?: string
 ): LaporanPasienRow[] {
-  let list = rows.filter((r) => r.statusVerifikasi === 'verified_karu');
+  let list = rows.filter(
+    (r) => r.statusVerifikasi === 'verified_karu' || r.statusVerifikasi === 'verified_pj'
+  );
   if (startDate && endDate) {
     list = list.filter((r) => r.tanggal >= startDate && r.tanggal <= endDate);
   } else if (startDate) {
@@ -817,14 +819,14 @@ function computeMonthlyNurseMatrixFromVerifiedKaru(params: {
 
   const matchingRows = verifiedPatientRows.filter(
     (r) =>
-      r.statusVerifikasi === 'verified_karu' &&
+      (r.statusVerifikasi === 'verified_karu' || r.statusVerifikasi === 'verified_pj') &&
       (r.tanggal || '').startsWith(`${ymKey}-`) &&
       isMatchingNurse(r.perawatPelaksana, namaPerawat)
   );
 
   const matchingLogbooks = verifiedLogbooks.filter(
     (lb) =>
-      lb.statusVerifikasi === 'verified_karu' &&
+      (lb.statusVerifikasi === 'verified_karu' || lb.statusVerifikasi === 'verified_pj') &&
       (lb.tanggal || '').startsWith(`${ymKey}-`) &&
       isMatchingNurse(lb.namaPerawat, namaPerawat)
   );
@@ -873,10 +875,12 @@ function computeMonthlyNurseMatrixFromVerifiedKaru(params: {
       continue;
     }
 
-    // Deduplicate all verified_karu patients on this date for this nurse
+    // Deduplicate all verified patients on this date for this nurse
     const combinedDayRows = mergeShiftPatientRows([
       ...dayPatientRows,
-      ...dayLogbooks.flatMap((lb) => extractRowsFromLogbookRecord(lb, 'verified_karu'))
+      ...dayLogbooks.flatMap((lb) =>
+        extractRowsFromLogbookRecord(lb, lb.statusVerifikasi || 'verified_pj')
+      )
     ]);
 
     const patCount = Math.max(
@@ -1052,7 +1056,9 @@ function computeMonthlyNurseMatrixFromVerifiedKaru(params: {
 
   const mergedAllMonthRows = mergeShiftPatientRows([
     ...matchingRows,
-    ...matchingLogbooks.flatMap((lb) => extractRowsFromLogbookRecord(lb, 'verified_karu'))
+    ...matchingLogbooks.flatMap((lb) =>
+      extractRowsFromLogbookRecord(lb, lb.statusVerifikasi || 'verified_pj')
+    )
   ]);
 
   return {
@@ -1341,7 +1347,7 @@ export const pasienLogbookService = {
       const fetchVerifiedFromCol = async (colName: string): Promise<LaporanPasienRow[]> => {
         const q = query(
           collection(db, colName),
-          where('statusVerifikasi', '==', 'verified_karu')
+          where('statusVerifikasi', 'in', ['verified_karu', 'verified_pj'])
         );
         const querySnapshot = await getDocs(q);
         const cloudRows: LaporanPasienRow[] = [];
@@ -1505,7 +1511,7 @@ export const pasienLogbookService = {
       if (cancelled) return;
       const q = query(
         collection(db, colName),
-        where('statusVerifikasi', '==', 'verified_karu')
+        where('statusVerifikasi', 'in', ['verified_karu', 'verified_pj'])
       );
 
       currentUnsub = onSnapshot(
@@ -2025,13 +2031,17 @@ export const pasienLogbookService = {
     return computeMonthlyNurseMatrixFromVerifiedKaru({
       namaPerawat,
       bulanTahun: ymKey,
-      verifiedPatientRows: verifiedPatientRows.filter((r) => r.statusVerifikasi === 'verified_karu'),
-      verifiedLogbooks: verifiedLogbooks.filter((lb) => lb.statusVerifikasi === 'verified_karu'),
+      verifiedPatientRows: verifiedPatientRows.filter(
+        (r) => r.statusVerifikasi === 'verified_karu' || r.statusVerifikasi === 'verified_pj'
+      ),
+      verifiedLogbooks: verifiedLogbooks.filter(
+        (lb) => lb.statusVerifikasi === 'verified_karu' || lb.statusVerifikasi === 'verified_pj'
+      ),
       options
     });
   },
 
-  // 9b. Real-time Subscription Matriks Bulanan 1-31 (29 Poin SPO) Perawat ('verified_karu')
+  // 9b. Real-time Subscription Matriks Bulanan 1-31 (29 Poin SPO) Perawat ('verified_karu' | 'verified_pj')
   subscribeMonthlyReportByNurse: (
     namaPerawat: string,
     bulanTahun: string,
@@ -2053,10 +2063,10 @@ export const pasienLogbookService = {
           namaPerawat,
           bulanTahun: ymKey,
           verifiedPatientRows: latestPatientRows.filter(
-            (r) => r.statusVerifikasi === 'verified_karu'
+            (r) => r.statusVerifikasi === 'verified_karu' || r.statusVerifikasi === 'verified_pj'
           ),
           verifiedLogbooks: latestLogbooks.filter(
-            (lb) => lb.statusVerifikasi === 'verified_karu'
+            (lb) => lb.statusVerifikasi === 'verified_karu' || lb.statusVerifikasi === 'verified_pj'
           ),
           options
         })

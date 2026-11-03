@@ -170,10 +170,19 @@ export async function resetQuotaExhaustion(): Promise<void> {
 // Clean up any stale quota flags on startup so fresh connection can be established
 if (typeof window !== 'undefined') {
   try {
+    const lastProjectId = sessionStorage.getItem('last_connected_project_id');
+    if (lastProjectId && lastProjectId !== firebaseConfig.projectId) {
+      sessionStorage.removeItem('firestore_quota_exhausted');
+      sessionStorage.removeItem('firestore_quota_exhausted_at');
+      isQuotaExhaustedMemory = false;
+    }
+    sessionStorage.setItem('last_connected_project_id', firebaseConfig.projectId || '');
+
     const exhaustedAt = Number(sessionStorage.getItem('firestore_quota_exhausted_at') || '0');
     if (Date.now() - exhaustedAt > 15 * 60 * 1000) {
       sessionStorage.removeItem('firestore_quota_exhausted');
       sessionStorage.removeItem('firestore_quota_exhausted_at');
+      isQuotaExhaustedMemory = false;
     }
   } catch {
     // ignore

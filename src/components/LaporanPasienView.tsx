@@ -350,35 +350,35 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
   };
 
   return (
-    <div className="space-y-4 pb-12">
+    <div className="w-full max-w-[1750px] mx-auto px-2 sm:px-4 space-y-4 pb-12">
       {/* ===================================================================== */}
       {/* TOP HEADER & DOCUMENT BANNER (SCREEN ONLY)                            */}
       {/* ===================================================================== */}
-      <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs print:hidden space-y-4">
+      <div className="bg-white/95 rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs print:hidden space-y-3.5">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div>
+          <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#185382]">
-              <span>Unit Hemodialisa</span>
-              <span aria-hidden="true">·</span>
-              <span>RS Happy Land Medical Centre</span>
-              <span aria-hidden="true">·</span>
-              <span className="text-slate-600 font-medium">Real-time Seluruh Input Shift</span>
+              <span className="uppercase tracking-wider">Unit Hemodialisa</span>
+              <span aria-hidden="true" className="text-slate-300">·</span>
+              <span className="text-slate-700">RS Happy Land Medical Centre</span>
+              <span aria-hidden="true" className="text-slate-300">·</span>
+              <span className="text-emerald-700 font-bold">Sinkronisasi Real-time Seluruh Input Shift</span>
             </div>
-            <h1 className="text-lg sm:text-xl font-black text-slate-950 mt-1 uppercase tracking-tight">
+            <h1 className="text-lg sm:text-xl xl:text-2xl font-black text-slate-950 mt-1 uppercase tracking-tight">
               LAPORAN PASIEN: DETAIL PELAYANAN ASUHAN KEPERAWATAN &amp; MEDIS
             </h1>
-            <p className="text-xs text-slate-600 mt-0.5">
+            <p className="text-xs text-slate-600 mt-0.5 leading-relaxed max-w-4xl">
               Menampilkan seluruh baris logbook pasien yang diinput oleh perawat pada shift aktif secara real-time dari Cloud Firestore (Draft, Diajukan, Verified PJ Shift, dan Verified Ka. Ruang).
             </p>
           </div>
 
-          {/* Action buttons */}
+          {/* Action buttons toolbar */}
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             {onNavigateToLogbook && (
               <button
                 type="button"
                 onClick={onNavigateToLogbook}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-all shadow-2xs cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-all border border-slate-200/80 cursor-pointer whitespace-nowrap shrink-0 shadow-2xs"
               >
                 <Book className="w-4 h-4 text-[#19588f]" />
                 <span>Buka Input Logbook</span>
@@ -387,7 +387,7 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
             <button
               type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1e4b85] hover:bg-[#163865] text-white text-xs font-bold transition-all shadow-sm cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1e4b85] hover:bg-[#163865] text-white text-xs font-bold transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
               title="Buka dialog cetak browser langsung (A4 Landscape)"
             >
               <Printer className="w-4 h-4" />
@@ -397,7 +397,7 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
               type="button"
               onClick={handleDownloadPdf}
               disabled={isExportingPdf}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-700 hover:bg-rose-800 disabled:opacity-50 text-white text-xs font-bold transition-all shadow-sm cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-700 hover:bg-rose-800 disabled:opacity-50 text-white text-xs font-bold transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
               title="Download file tabel pasien langsung sebagai PDF (.pdf)"
             >
               <FileDown className="w-4 h-4" />
@@ -406,19 +406,19 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
             <button
               type="button"
               onClick={handleExportMasterSpreadsheet}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition-all shadow-sm cursor-pointer whitespace-nowrap shrink-0"
-              title="Unduh 1 File Master Excel (.xlsx) yang menggabungkan Laporan Pasien, Laporan PJ Shift, dan Rekapitulasi Bulanan Semua Perawat"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition-all shadow-xs cursor-pointer whitespace-nowrap shrink-0"
+              title="Unduh 1 File Master Excel (.xlsx) gabungan seluruh laporan"
             >
               <FileSpreadsheet className="w-4 h-4 shrink-0" />
-              <span>Master Excel (Semua Laporan)</span>
+              <span>Master Excel (.xlsx)</span>
             </button>
           </div>
         </div>
 
         {/* Shift metadata bar */}
-        <div className="pt-3 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-700">
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span className="inline-flex items-center gap-1.5 font-semibold text-slate-900">
+        <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-700 bg-slate-50/70 rounded-xl p-2.5 border border-slate-200/60">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <span className="inline-flex items-center gap-1.5 font-bold text-slate-900">
               <Clock className="w-3.5 h-3.5 text-[#19588f]" />
               Shift:{' '}
               <span className="text-[#19588f]">
@@ -428,7 +428,7 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
             <span aria-hidden="true" className="text-slate-300">·</span>
             <span className="inline-flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-slate-500" />
-              Hari/Tanggal: <strong>{displayDateLabel}</strong>
+              <span>Hari/Tanggal: <strong>{displayDateLabel}</strong></span>
             </span>
             <span aria-hidden="true" className="text-slate-300">·</span>
             <span>PJ Shift: <strong>{shiftSignatories.pjName}</strong></span>
@@ -438,9 +438,9 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
             <span>Ka. Ruang: <strong>{shiftSignatories.kepalaRuangName}</strong></span>
           </div>
 
-          {/* Status Sinkronisasi Real-time Cloud Firestore (Semua Status Verifikasi) */}
-          <div className="flex flex-wrap items-center gap-2.5 tabular-nums">
-            <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-semibold text-slate-600">
+          {/* Status Sinkronisasi Real-time Cloud Firestore */}
+          <div className="flex flex-wrap items-center gap-2.5 tabular-nums text-xs">
+            <div className="flex flex-wrap items-center gap-1.5 font-semibold text-slate-700">
               {isLoadingReport ? (
                 <span className="inline-flex items-center gap-1.5 text-[#19588f] font-bold">
                   <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
@@ -448,15 +448,15 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
                 </span>
               ) : (
                 <>
-                  <ShieldCheck className="w-3.5 h-3.5 text-[#19588f] shrink-0" />
-                  <span className="font-bold text-slate-900">Total Input: {rawRows.length}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Draft: {statusCounts.draft}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Diajukan: {statusCounts.submitted}</span>
-                  <span aria-hidden="true">·</span>
+                  <ShieldCheck className="w-4 h-4 text-[#19588f] shrink-0" />
+                  <span className="font-bold text-slate-950">Total: {rawRows.length} Pasien</span>
+                  <span aria-hidden="true" className="text-slate-300">·</span>
+                  <span className="text-slate-600">Draft: {statusCounts.draft}</span>
+                  <span aria-hidden="true" className="text-slate-300">·</span>
+                  <span className="text-amber-800">Diajukan: {statusCounts.submitted}</span>
+                  <span aria-hidden="true" className="text-slate-300">·</span>
                   <span className="text-blue-800">Verified PJ: {statusCounts.verifiedPj}</span>
-                  <span aria-hidden="true">·</span>
+                  <span aria-hidden="true" className="text-slate-300">·</span>
                   <span className="text-emerald-800">Verified Ka. Ruang: {statusCounts.verifiedKaru}</span>
                 </>
               )}
@@ -466,7 +466,7 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
               onClick={() => void fetchRawShiftReports(selectedDateIso, selectedShift)}
               disabled={isLoadingReport}
               title="Muat ulang seluruh baris logbook shift dari Cloud Firestore"
-              className="p-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 disabled:opacity-50 text-slate-700 transition-colors cursor-pointer shrink-0"
+              className="p-1.5 rounded-lg bg-white hover:bg-slate-200 border border-slate-200 disabled:opacity-50 text-slate-700 transition-colors cursor-pointer shrink-0"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isLoadingReport ? 'animate-spin' : ''}`} />
             </button>
@@ -476,7 +476,7 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
 
       {/* Cloud Network Error Banner */}
       {reportError && (
-        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs text-rose-900 print:hidden">
+        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs text-rose-900 print:hidden shadow-2xs">
           <div className="flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             <span className="font-semibold">{reportError}</span>
@@ -494,16 +494,16 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
       {/* ===================================================================== */}
       {/* FILTER & SEARCH BAR (SCREEN ONLY)                                     */}
       {/* ===================================================================== */}
-      <div className="bg-white/85 backdrop-blur-md rounded-2xl p-3 border border-slate-200/80 shadow-xs flex flex-wrap items-center justify-between gap-3 print:hidden">
+      <div className="bg-white/95 rounded-2xl p-3 sm:p-3.5 border border-slate-200/90 shadow-xs flex flex-wrap items-center justify-between gap-3 print:hidden">
         {/* Search input */}
-        <div className="relative flex-1 min-w-[220px] max-w-md">
+        <div className="relative flex-1 min-w-[240px] max-w-md">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             placeholder="Cari Nama Pasien, No. RM, Bed, Perawat, Status..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 bg-white focus:outline-hidden focus:border-[#19588f] focus:ring-2 focus:ring-[#19588f]/10"
+            className="w-full pl-9 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 bg-slate-50/50 focus:bg-white focus:outline-hidden focus:border-[#19588f] focus:ring-2 focus:ring-[#19588f]/10 transition-all font-medium"
           />
         </div>
 
@@ -514,9 +514,9 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
             <button
               type="button"
               onClick={() => setSelectedShift('Pagi')}
-              className={`px-3 py-1 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 selectedShift === 'Pagi'
-                  ? 'bg-[#19588f] text-white shadow-2xs'
+                  ? 'bg-[#19588f] text-white shadow-2xs font-extrabold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -525,9 +525,9 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
             <button
               type="button"
               onClick={() => setSelectedShift('Siang')}
-              className={`px-3 py-1 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+              className={`px-3 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 selectedShift === 'Siang'
-                  ? 'bg-[#19588f] text-white shadow-2xs'
+                  ? 'bg-[#19588f] text-white shadow-2xs font-extrabold'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -535,14 +535,14 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
             </button>
           </div>
 
-          {/* Verification Status Filter (Default: Semua Status Tanpa Memandang Verifikasi) */}
+          {/* Verification Status Filter */}
           <div className="flex items-center gap-1.5 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 tabular-nums">
             <ShieldCheck className="w-3.5 h-3.5 text-[#19588f] shrink-0" />
             <select
               aria-label="Filter Status Verifikasi"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-transparent font-bold text-slate-900 border-none outline-hidden cursor-pointer"
+              className="bg-transparent font-bold text-slate-900 border-none outline-hidden cursor-pointer text-xs"
             >
               <option value="all">Semua Status ({rawRows.length})</option>
               <option value="draft">Draft Input ({statusCounts.draft})</option>
@@ -559,7 +559,7 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
               aria-label="Filter Kategori Pasien"
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="bg-transparent font-bold text-slate-900 border-none outline-hidden cursor-pointer"
+              className="bg-transparent font-bold text-slate-900 border-none outline-hidden cursor-pointer text-xs"
             >
               <option value="all">Semua Kategori</option>
               <option value="reguler">Reguler</option>
@@ -569,10 +569,9 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
             </select>
           </div>
 
-          {/* Interactive Date Picker (Memicu getRawReportsByShift(tanggal, shift)) */}
+          {/* Interactive Date Picker */}
           <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 px-2.5 py-1 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 tabular-nums">
             <Calendar className="w-3.5 h-3.5 text-[#19588f] shrink-0" />
-            <span className="text-[11px] text-slate-500">Tanggal:</span>
             <input
               type="date"
               aria-label="Tanggal Shift Laporan Pasien"
@@ -609,58 +608,58 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
       {/* ===================================================================== */}
       {/* SUMMARY KPI CARDS (SCREEN ONLY)                                       */}
       {/* ===================================================================== */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2.5 print:hidden tabular-nums">
-        <div className="p-3 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 print:hidden tabular-nums">
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
             Pasien Shift Ini
           </span>
-          <span className="text-xl font-black text-slate-950 block mt-0.5">
-            {summary.totalPasien} <span className="text-xs font-normal text-slate-600">Pasien</span>
+          <span className="text-xl sm:text-2xl font-black text-slate-950 block mt-1">
+            {summary.totalPasien} <span className="text-xs font-semibold text-slate-500 font-sans">Pasien</span>
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
             Total UF Ditarik
           </span>
-          <span className="text-xl font-black text-[#19588f] block mt-0.5">
+          <span className="text-xl sm:text-2xl font-black text-[#19588f] block mt-1">
             {summary.totalCapaianUf.toLocaleString('id-ID')}{' '}
-            <span className="text-xs font-normal text-slate-600">mL</span>
+            <span className="text-xs font-semibold text-slate-500 font-sans">mL</span>
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
             Rata-rata Kt/V
           </span>
-          <span className="text-xl font-black text-emerald-700 block mt-0.5">
-            {summary.rataKtV} <span className="text-xs font-normal text-slate-600">(&ge; 1,20)</span>
+          <span className="text-xl sm:text-2xl font-black text-emerald-700 block mt-1">
+            {summary.rataKtV} <span className="text-xs font-normal text-slate-500 font-sans">(&ge; 1,20)</span>
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
             Rata-rata QB
           </span>
-          <span className="text-xl font-black text-slate-900 block mt-0.5">
-            {summary.rataQb} <span className="text-xs font-normal text-slate-600">mL/m</span>
+          <span className="text-xl sm:text-2xl font-black text-slate-900 block mt-1">
+            {summary.rataQb} <span className="text-xs font-semibold text-slate-500 font-sans">mL/m</span>
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
             Rata-rata Durasi
           </span>
-          <span className="text-xl font-black text-slate-900 block mt-0.5">
-            {summary.rataDurasiJam} <span className="text-xs font-normal text-slate-600">Jam</span>
+          <span className="text-xl sm:text-2xl font-black text-slate-900 block mt-1">
+            {summary.rataDurasiJam} <span className="text-xs font-semibold text-slate-500 font-sans">Jam</span>
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-white/90 border border-slate-200/80 shadow-2xs">
-          <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider block">
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">
             Mutu Air RO
           </span>
-          <span className="text-sm font-extrabold text-emerald-800 block mt-1">
+          <span className="text-base sm:text-lg font-black text-emerald-800 block mt-1 truncate">
             {summary.totalPasien > 0
               ? `${summary.roMemenuhiSyaratCount}/${summary.totalPasien} Memenuhi`
               : 'Siap Pakai'}
@@ -701,14 +700,14 @@ export const LaporanPasienView: React.FC<LaporanPasienViewProps> = ({
         </div>
 
         {/* Horizontal Scrollable Table Wrapper */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto max-h-[760px] scrollbar-thin print:max-h-none print:overflow-visible">
           <table className="w-full text-left border-collapse border border-slate-300 print:border-black text-[9px] sm:text-[10px] xl:text-[10.5px] font-sans leading-tight print:text-[7.5px] print:leading-none">
             {/* 2-TIER TABLE HEADER (31 COLUMNS) */}
-            <thead>
-              <tr className="bg-[#1f4e79] text-white text-center font-bold tracking-tight print:bg-slate-200 print:text-black">
+            <thead className="sticky top-0 z-20 print:static shadow-xs">
+              <tr className="bg-[#173a64] text-white text-center font-bold tracking-tight print:bg-slate-200 print:text-black">
                 <th
                   rowSpan={2}
-                  className="border border-slate-300 print:border-black p-1 sm:p-1.5 w-7 text-center align-middle"
+                  className="border border-slate-300 print:border-black p-1 sm:p-1.5 w-8 text-center align-middle"
                 >
                   NO
                 </th>

@@ -721,8 +721,10 @@ function filterVerifiedKaruRecords(
   startDateOrFilter?: string | VerifiedReportsFilter,
   endDate?: string
 ): LogbookHarianRecord[] {
-  // Sesuai aturan: HANYA menarik data yang sudah disetujui Kepala Ruang ('verified_karu')
-  let list = records.filter((r) => r.statusVerifikasi === 'verified_karu');
+  // Sesuai aturan: Menarik data yang sudah diverifikasi PJ Shift maupun Kepala Ruang
+  let list = records.filter(
+    (r) => r.statusVerifikasi === 'verified_karu' || r.statusVerifikasi === 'verified_pj'
+  );
 
   if (!startDateOrFilter) {
     return list.sort((a, b) => (b.tanggal || '').localeCompare(a.tanggal || ''));
@@ -1104,7 +1106,7 @@ export const logbookService = {
       const fetchVerifiedFromCol = async (colName: string): Promise<LogbookHarianRecord[]> => {
         const q = query(
           collection(db, colName),
-          where('statusVerifikasi', '==', 'verified_karu')
+          where('statusVerifikasi', 'in', ['verified_karu', 'verified_pj'])
         );
         const querySnapshot = await getDocs(q);
         const cloudRecords: LogbookHarianRecord[] = [];
@@ -1261,7 +1263,7 @@ export const logbookService = {
       if (cancelled) return;
       const q = query(
         collection(db, colName),
-        where('statusVerifikasi', '==', 'verified_karu')
+        where('statusVerifikasi', 'in', ['verified_karu', 'verified_pj'])
       );
 
       currentUnsub = onSnapshot(

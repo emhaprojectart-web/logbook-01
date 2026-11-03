@@ -518,6 +518,13 @@ nurseSchedulesDirtyRef.current
 ? mergeNurseSchedules(prevLocal, cleanedCloud)
 : mergeNurseSchedules(cleanedCloud, prevLocal)
 );
+} else {
+setNurseSchedules((prevLocal) => {
+if (prevLocal && prevLocal.length > 0) {
+saveNurseSchedulesCloud(prevLocal).catch(() => {});
+}
+return prevLocal;
+});
 }
 }
 });
@@ -534,6 +541,13 @@ doctorSchedulesDirtyRef.current
 ? mergeDoctorSchedules(prevLocal, cleanedCloudDocs)
 : mergeDoctorSchedules(cleanedCloudDocs, prevLocal)
 );
+} else {
+setDoctorSchedules((prevLocal) => {
+if (prevLocal && prevLocal.length > 0) {
+saveDoctorSchedulesCloud(prevLocal).catch(() => {});
+}
+return prevLocal;
+});
 }
 }
 });

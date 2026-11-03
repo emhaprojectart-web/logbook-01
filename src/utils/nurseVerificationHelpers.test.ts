@@ -799,7 +799,7 @@ test('collectOccupiedLogbookAssets excludeSession allows editing an existing ses
   assert.ok(modalEditView.findBedClaimedByOther('BED A05'));
 });
 
-test('logbookService & pasienLogbookService async verification (PJ Shift -> Kepala Ruang) and strict verified_karu Laporan gating', async () => {
+test('logbookService & pasienLogbookService async verification (PJ Shift -> Kepala Ruang) and verified_pj / verified_karu Laporan gating', async () => {
   logbookService.clearAllRecords();
   pasienLogbookService.clearAllPatientSessions();
 
@@ -963,11 +963,11 @@ test('logbookService & pasienLogbookService async verification (PJ Shift -> Kepa
   });
   assert.equal(karuMappedEntry.status, 'diajukan');
 
-  // Strict rule: 'verified_pj' must NOT appear in verified reports until Kepala Ruang approves ('verified_karu')
-  assert.equal((await logbookService.getVerifiedReports('2026-10-29', '2026-10-29')).length, 0);
+  // Verified rule: 'verified_pj' appears in verified reports & monthly reports as well as 'verified_karu'
+  assert.equal((await logbookService.getVerifiedReports('2026-10-29', '2026-10-29')).length, 1);
   assert.equal(
     (await pasienLogbookService.getVerifiedPatientReports('2026-10-29', '2026-10-29')).length,
-    0
+    1
   );
 
   // 4. Kepala Ruang finalizes verification ('verified_karu') -> pending queue becomes 0, enters getVerifiedReports() & getVerifiedPatientReports()!

@@ -66,32 +66,32 @@ const BAGIAN_SECTION_HEADERS: {
   {
     bagian: 1,
     title: 'BAGIAN I: KESIAPAN FASILITAS RUANGAN & WATER TREATMENT (RO)',
-    ruleBadge: 'Nilai = 1 (1x Aktivitas / Hari verified_karu)'
+    ruleBadge: 'Nilai = 1 (1x Aktivitas / Hari Terverifikasi PJ / Karu)'
   },
   {
     bagian: 2,
     title: 'BAGIAN II: PERSIAPAN PERAWAT, PERALATAN, MESIN HD & ALKES (PRE-HD)',
-    ruleBadge: 'Akumulasi Pasien Kelolaan (verified_karu)'
+    ruleBadge: 'Akumulasi Pasien Kelolaan Terverifikasi (PJ / Karu)'
   },
   {
     bagian: 3,
     title: 'BAGIAN III: IDENTIFIKASI PASIEN, PENGKAJIAN PRE-HD & PATIENT SAFETY',
-    ruleBadge: 'Akumulasi Pasien Kelolaan (verified_karu)'
+    ruleBadge: 'Akumulasi Pasien Kelolaan Terverifikasi (PJ / Karu)'
   },
   {
     bagian: 4,
     title: 'BAGIAN IV: MONITORING INTRA-HD & PENCEGAHAN IKP',
-    ruleBadge: 'Akumulasi Pasien Kelolaan (verified_karu)'
+    ruleBadge: 'Akumulasi Pasien Kelolaan Terverifikasi (PJ / Karu)'
   },
   {
     bagian: 5,
     title: 'BAGIAN V: EDUKASI TERSTRUKTUR PASIEN & KELUARGA (KIE)',
-    ruleBadge: 'Akumulasi Pasien Kelolaan (verified_karu)'
+    ruleBadge: 'Akumulasi Pasien Kelolaan Terverifikasi (PJ / Karu)'
   },
   {
     bagian: 6,
     title: 'BAGIAN VI: TERMINASI AMAN, EVALUASI POST-HD, DISINFEKSI & CPPT',
-    ruleBadge: 'Akumulasi Pasien Kelolaan (verified_karu)'
+    ruleBadge: 'Akumulasi Pasien Kelolaan Terverifikasi (PJ / Karu)'
   }
 ];
 
@@ -206,7 +206,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
 
   // =========================================================================
   // CLOUD FIRESTORE FETCH: pasienLogbookService.getMonthlyReportByNurse(namaPerawat, bulanTahun)
-  // Melacak akumulasi 29 butir kegiatan asuhan keperawatan milik perawat yang sudah 'verified_karu'
+  // Melacak akumulasi 29 butir kegiatan asuhan keperawatan milik perawat yang terverifikasi (PJ Shift / Ka. Ruang)
   // =========================================================================
   const [monthlyNurseReport, setMonthlyNurseReport] =
     useState<MonthlyNurseSpoMatrixReport | null>(null);
@@ -239,7 +239,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
     } catch (err) {
       console.error('Gagal mengambil laporan matriks bulanan perawat dari Cloud Firestore:', err);
       setMonthlyCloudError(
-        'Gagal memuat matriks bulanan 29 poin SPO (verified_karu) dari jaringan Cloud Firestore.'
+        'Gagal memuat matriks bulanan 29 poin SPO terverifikasi (PJ Shift / Ka. Ruang) dari jaringan Cloud Firestore.'
       );
     } finally {
       setIsLoadingMonthlyCloud(false);
@@ -480,7 +480,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
   const isViewingIndividualMatrix = isPelaksana || effectiveSelectedStaff !== ALL_STAFF_KEY;
 
   return (
-    <div className="space-y-4 pb-10">
+    <div className="w-full max-w-[1750px] mx-auto px-2 sm:px-4 space-y-4 pb-12">
       {/* ===================================================================== */}
       {/* 1. HEADER CARD & INTEGRATED CONTROL BAR                               */}
       {/* ===================================================================== */}
@@ -492,7 +492,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                 Laporan Bulanan Hemodialisis (29 Poin SPO)
               </span>
               <span aria-hidden="true" className="text-slate-300">&middot;</span>
-              <span>Basis Data: Disahkan Kepala Ruang (verified_karu)</span>
+              <span>Basis Data: Terverifikasi PJ Shift &amp; Kepala Ruang (verified_pj / verified_karu)</span>
               <span aria-hidden="true" className="text-slate-300">&middot;</span>
               <span className="truncate">{shiftInfo?.hospitalName || 'RS Happy Land Medical Centre'}</span>
             </div>
@@ -510,7 +510,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
             </h2>
 
             <p className="text-xs text-slate-600 leading-relaxed max-w-4xl">
-              Melacak akumulasi 29 butir kegiatan asuhan keperawatan hemodialisis (Bagian I–VI) pada kolom tanggal 1 sampai 31 horizontal yang telah berstatus <strong>verified_karu</strong> di Cloud Firestore.{' '}
+              Melacak akumulasi 29 butir kegiatan asuhan keperawatan hemodialisis (Bagian I–VI) pada kolom tanggal 1 sampai 31 horizontal yang telah diverifikasi oleh <strong>PJ Shift</strong> maupun <strong>Kepala Ruang</strong> di Cloud Firestore.{' '}
               &middot; Periode Kode: <strong className="text-[#164e78] font-mono">{bulanTahun}</strong>
               {isLoadingMonthlyCloud && (
                 <span className="inline-flex items-center gap-1 ml-2 text-[#164e78] font-semibold">
@@ -643,7 +643,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                   }}
                   className="bg-white border border-slate-300 text-slate-900 font-semibold text-xs rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-[#164e78]/30 focus:border-[#164e78] focus:outline-hidden w-full cursor-pointer shadow-2xs transition-all"
                 >
-                  <optgroup label="Matriks 1–31 Perawat (29 Poin SPO verified_karu)">
+                  <optgroup label="Matriks 1–31 Perawat (29 Poin SPO Terverifikasi)">
                     {activeNurses.map((nurse) => {
                       const nurseRecap = unitRecap.staffSummaries.find(
                         (s) => s.nurseName === nurse.name
@@ -780,7 +780,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                   <span className="text-xs font-semibold text-slate-500 font-sans">Pasien</span>
                 </div>
                 <div className="text-[11px] text-emerald-700 font-semibold truncate mt-0.5">
-                  Disahkan Kepala Ruang (verified_karu)
+                  Terverifikasi PJ Shift &amp; Ka. Ruang
                 </div>
               </div>
               <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100">
@@ -960,14 +960,14 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                 <div className="bg-white p-4 rounded-xl border border-slate-200/90 flex items-center justify-between gap-3 shadow-xs">
                   <div className="min-w-0">
                     <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                      Pasien Disahkan Ka. Ruang
+                      Pasien Terverifikasi (PJ / Karu)
                     </div>
                     <div className="text-xl sm:text-2xl font-black text-slate-900 mt-1 font-mono">
                       {monthlyNurseReport.totalVerifiedPatientsInMonth}{' '}
                       <span className="text-xs font-semibold text-slate-500 font-sans">Pasien</span>
                     </div>
                     <div className="text-[11.5px] text-emerald-700 font-semibold truncate mt-0.5">
-                      Status: verified_karu
+                      Status: verified_pj / verified_karu
                     </div>
                   </div>
                   <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-100">
@@ -993,17 +993,17 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                 </div>
               </div>
 
-              {/* Informational Banner if No verified_karu Days in This Month */}
+              {/* Informational Banner if No verified Days in This Month */}
               {monthlyNurseReport.verifiedDaysCount === 0 && !isLoadingMonthlyCloud && (
                 <div className="bg-amber-50/60 rounded-2xl border border-amber-200 p-4 sm:p-5 shadow-2xs space-y-3 print:hidden">
                   <div className="flex items-start gap-3">
                     <AlertCircle className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
                     <div className="space-y-1 flex-1">
                       <h3 className="text-sm font-bold text-amber-950">
-                        Belum Ada Data Berstatus verified_karu untuk {monthlyNurseReport.logbook.nurseName} pada Periode {currentMonthYearTitle}
+                        Belum Ada Data Terverifikasi untuk {monthlyNurseReport.logbook.nurseName} pada Periode {currentMonthYearTitle}
                       </h3>
                       <p className="text-xs text-amber-900/90 leading-relaxed">
-                        Tabel matriks horizontal 1–31 di bawah ini melacak akumulasi 29 poin kegiatan asuhan keperawatan milik perawat yang telah disahkan oleh Kepala Ruang (<strong>verified_karu</strong>) di Cloud Firestore.
+                        Tabel matriks horizontal 1–31 di bawah ini melacak akumulasi 29 poin kegiatan asuhan keperawatan milik perawat yang telah diverifikasi oleh Penanggung Jawab (PJ) Shift atau disahkan oleh Kepala Ruang di Cloud Firestore.
                       </p>
                     </div>
                   </div>
@@ -1052,7 +1052,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                           </span>
                         </h3>
                         <p className="text-xs text-slate-500 mt-0.5">
-                          Perawat: <strong>{monthlyNurseReport.logbook.nurseName}</strong> &middot; Hanya menghitung kegiatan yang telah disahkan Kepala Ruang (<strong>verified_karu</strong>).
+                          Perawat: <strong>{monthlyNurseReport.logbook.nurseName}</strong> &middot; Menghitung kegiatan yang telah diverifikasi PJ Shift maupun Kepala Ruang (<strong>verified_pj / verified_karu</strong>).
                         </p>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
@@ -1111,7 +1111,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                               colSpan={31}
                               className="p-1.5 border-b border-[#1e5d8e] text-[10px] uppercase font-bold tracking-wider bg-[#1a5b8c] text-white"
                             >
-                              TANGGAL 1 SAMPAI 31 HORIZONTAL (VERIFIED_KARU) — {monthlyNurseReport.logbook.monthYear.toUpperCase()}
+                              TANGGAL 1 SAMPAI 31 HORIZONTAL (TERVERIFIKASI PJ / KARU) — {monthlyNurseReport.logbook.monthYear.toUpperCase()}
                             </th>
                             <th
                               rowSpan={2}
@@ -1167,16 +1167,16 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                         </thead>
 
                         <tbody className="divide-y divide-slate-200 text-[11px] text-slate-800">
-                          {/* Reference Row: Verified_Karu Patients per Day (1..31) */}
+                          {/* Reference Row: Verified Patients per Day (1..31) */}
                           <tr className="bg-indigo-50/80 font-bold text-indigo-950 group">
                             <td
                               colSpan={2}
                               className="px-3 py-2 border-r border-slate-200 sticky left-0 bg-indigo-50/95 group-hover:bg-indigo-100 z-10 text-[10.5px] uppercase tracking-wider font-bold"
                             >
-                              Pasien (verified_karu)
+                              Pasien (Terverifikasi)
                             </td>
                             <td className="px-3 py-2 border-r border-slate-200 text-[10.5px] text-indigo-900">
-                              Jumlah sesi pasien kelolaan perawat yang telah disahkan Kepala Ruang
+                              Jumlah sesi pasien kelolaan perawat yang telah diverifikasi PJ Shift atau Kepala Ruang
                             </td>
                             {daysArray.map((day, dayIdx) => {
                               const pCount =
@@ -1252,10 +1252,10 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                                           : 'bg-white hover:bg-blue-50/40'
                                       }`}
                                     >
-                                      <td className="px-2 py-1.5 text-center font-mono font-bold text-slate-900 border-r border-slate-200 sticky left-0 z-10 bg-white group-hover:bg-blue-50/70">
+                                      <td className={`px-2 py-1.5 text-center font-mono font-bold text-slate-900 border-r border-slate-200 sticky left-0 z-10 ${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} group-hover:bg-blue-50/70`}>
                                         {item.code}
                                       </td>
-                                      <td className="px-2.5 py-1.5 font-bold text-slate-800 border-r border-slate-200 sticky left-[52px] z-10 bg-white group-hover:bg-blue-50/70 leading-snug text-[10.5px]">
+                                      <td className={`px-2.5 py-1.5 font-bold text-slate-800 border-r border-slate-200 sticky left-[52px] z-10 ${idx % 2 === 1 ? 'bg-slate-50' : 'bg-white'} group-hover:bg-blue-50/70 leading-snug text-[10.5px]`}>
                                         {item.category}
                                       </td>
                                       <td className="px-3 py-1.5 text-slate-700 border-r border-slate-200 text-[11px] leading-tight">
@@ -1299,7 +1299,7 @@ export const LapBulananView: React.FC<LapBulananViewProps> = ({
                                               isOutOfMonth
                                                 ? undefined
                                                 : isVerif
-                                                ? `Tanggal ${day}: Poin ${item.code} = ${val} dari ${maxCell} (verified_karu)`
+                                                ? `Tanggal ${day}: Poin ${item.code} = ${val} dari ${maxCell} (terverifikasi)`
                                                 : undefined
                                             }
                                           >

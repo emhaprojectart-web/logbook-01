@@ -151,11 +151,10 @@ export const LapHarianView: React.FC<LapHarianViewProps> = ({
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [copiedSbar, setCopiedSbar] = useState<boolean>(false);
 
+  // Inisialisasi default ke preview dokumen lengkap KARS, namun mengizinkan navigasi bebas ke Blok A-F
   useEffect(() => {
-    if (isSupervisor) {
-      setActiveSubTab('preview_full');
-    }
-  }, [isSupervisor]);
+    // Biarkan user memilih tab tanpa di-lock secara paksa
+  }, []);
 
   const activeDay = extractActiveDayName(shiftInfo.date) as HdTreatmentDay;
   const activeShift: 'Pagi' | 'Siang' = shiftInfo.shift === 'Siang' ? 'Siang' : 'Pagi';
@@ -947,7 +946,7 @@ export const LapHarianView: React.FC<LapHarianViewProps> = ({
   const activeDateFormatted = shiftSummary.activeDateFormatted;
 
   return (
-    <div className="space-y-4 sm:space-y-6 pb-10">
+    <div className="w-full max-w-[1750px] mx-auto px-2 sm:px-4 space-y-4 pb-12">
       {/* Toast Alert */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2.5 text-xs border border-slate-700 animate-in fade-in slide-in-from-bottom-3">
@@ -957,21 +956,21 @@ export const LapHarianView: React.FC<LapHarianViewProps> = ({
       )}
 
       {/* Top Banner & Title Lockup */}
-      <div className="bg-white/90 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-xs space-y-4 print:hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-600 font-medium">
-              <span className="font-bold text-[#1e4b85]">Model Akreditasi KARS (Blok A–F)</span>
-              <span aria-hidden="true">·</span>
-              <span>Basis Data: Minimal Verified PJ Shift / Verified Ka. Ruang</span>
-              <span aria-hidden="true">·</span>
-              <span>Unit HD RS Happy Land</span>
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs space-y-4 print:hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 font-semibold">
+              <span className="text-[#1e4b85] font-bold uppercase tracking-wider">Model Akreditasi KARS (Blok A–F)</span>
+              <span aria-hidden="true" className="text-slate-300">&middot;</span>
+              <span>Basis: Minimal Verified PJ / Ka. Ruang</span>
+              <span aria-hidden="true" className="text-slate-300">&middot;</span>
+              <span className="truncate">{shiftInfo?.hospitalName || 'RS Happy Land Medical Centre'}</span>
             </div>
-            <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 mt-1 uppercase tracking-tight">
+            <h1 className="text-lg sm:text-xl font-black text-slate-950 mt-1 uppercase tracking-tight">
               {isSupervisor ? 'LAPORAN PJ SHIFT (AKREDITASI KARS BLOK A–F)' : 'LAPORAN HARIAN SHIFT HEMODIALISIS (BLOK A–F)'}
             </h1>
-            <p className="text-xs text-slate-600 mt-0.5 max-w-3xl">
-              Menghitung sensus pasien, persentase indikator mutu klinis, checklist Water Treatment RO, serta format teks serah terima SBAR secara real-time hanya dari sesi pasien berstatus minimal <strong>verified_pj</strong> atau <strong>verified_karu</strong>.
+            <p className="text-xs text-slate-600 mt-0.5 max-w-3xl leading-relaxed">
+              Menghitung sensus pasien, persentase mutu klinis, checklist Water Treatment RO, serta serah terima SBAR secara real-time dari sesi pasien berstatus minimal <strong>verified_pj</strong> atau <strong>verified_karu</strong>.
             </p>
           </div>
 
@@ -1024,7 +1023,7 @@ export const LapHarianView: React.FC<LapHarianViewProps> = ({
               title="Unduh 1 File Master Excel (.xlsx) yang menggabungkan Laporan Pasien, Laporan PJ Shift, dan Rekapitulasi Bulanan Semua Perawat"
             >
               <FileSpreadsheet className="w-4 h-4 shrink-0" />
-              <span>Master Excel (Semua Laporan)</span>
+              <span>Master Excel (.xlsx)</span>
             </button>
           </div>
         </div>
@@ -1134,105 +1133,99 @@ export const LapHarianView: React.FC<LapHarianViewProps> = ({
       </div>
 
       {/* Sub-Tabs Navigation for Section Selection */}
-      <div
-        className={`bg-white/85 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200/80 shadow-xs flex flex-wrap items-center ${
-          isSupervisor ? 'justify-end' : 'justify-between'
-        } gap-2 print:hidden`}
-      >
-        {!isSupervisor && (
-          <div className="flex flex-wrap items-center gap-1">
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('preview_full')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
-                activeSubTab === 'preview_full'
-                  ? 'bg-[#1e4b85] text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              Dokumen KARS (Blok A–F)
-            </button>
+      <div className="bg-white/95 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200/90 shadow-xs flex flex-wrap items-center justify-between gap-2 print:hidden">
+        <div className="flex flex-wrap items-center gap-1">
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('preview_full')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+              activeSubTab === 'preview_full'
+                ? 'bg-[#1e4b85] text-white shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            Dokumen KARS (Blok A–F)
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('section_a')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
-                activeSubTab === 'section_a'
-                  ? 'bg-[#1e4b85] text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              Blok A: Ketenagaan
-            </button>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('section_a')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+              activeSubTab === 'section_a'
+                ? 'bg-[#1e4b85] text-white shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            Blok A: Ketenagaan
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('section_b')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
-                activeSubTab === 'section_b'
-                  ? 'bg-[#1e4b85] text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <Activity className="w-4 h-4" />
-              Blok B: Sensus &amp; Mesin
-            </button>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('section_b')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+              activeSubTab === 'section_b'
+                ? 'bg-[#1e4b85] text-white shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <Activity className="w-4 h-4" />
+            Blok B: Sensus &amp; Mesin
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('section_c')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
-                activeSubTab === 'section_c'
-                  ? 'bg-[#1e4b85] text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <Stethoscope className="w-4 h-4" />
-              Blok C: Mutu Klinis
-            </button>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('section_c')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+              activeSubTab === 'section_c'
+                ? 'bg-[#1e4b85] text-white shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <Stethoscope className="w-4 h-4" />
+            Blok C: Mutu Klinis
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('section_d')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
-                activeSubTab === 'section_d'
-                  ? 'bg-[#1e4b85] text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <CheckSquare className="w-4 h-4" />
-              Blok D: Checklist RO
-            </button>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('section_d')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+              activeSubTab === 'section_d'
+                ? 'bg-[#1e4b85] text-white shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <CheckSquare className="w-4 h-4" />
+            Blok D: Checklist RO
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('section_e')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
-                activeSubTab === 'section_e'
-                  ? 'bg-[#1e4b85] text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <Sparkles className="w-4 h-4" />
-              Blok E: SBAR
-            </button>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('section_e')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+              activeSubTab === 'section_e'
+                ? 'bg-[#1e4b85] text-white shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" />
+            Blok E: SBAR
+          </button>
 
-            <button
-              type="button"
-              onClick={() => setActiveSubTab('section_f')}
-              className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
-                activeSubTab === 'section_f'
-                  ? 'bg-[#1e4b85] text-white shadow-xs'
-                  : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              <ClipboardCheck className="w-4 h-4" />
-              Blok F: Pengesahan
-            </button>
-          </div>
-        )}
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('section_f')}
+            className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
+              activeSubTab === 'section_f'
+                ? 'bg-[#1e4b85] text-white shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <ClipboardCheck className="w-4 h-4" />
+            Blok F: Pengesahan
+          </button>
+        </div>
 
         {/* Active Date & Shift Filter Controls */}
         <div className="flex flex-wrap items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-100 text-[11px] font-semibold text-slate-700 tabular-nums">
@@ -1313,16 +1306,14 @@ export const LapHarianView: React.FC<LapHarianViewProps> = ({
                   Dihitung eksklusif dari <strong>{karsSummary.qualityMetrics.totalVerifiedSessions} sesi pasien</strong> berstatus minimal <strong>verified_pj</strong> ({karsSummary.qualityMetrics.verifiedPjCount}) atau <strong>verified_karu</strong> ({karsSummary.qualityMetrics.verifiedKaruCount}) pada Shift {activeShift} ({activeDateFormatted}).
                 </p>
               </div>
-              {!isSupervisor && (
-                <button
-                  type="button"
-                  onClick={() => setActiveSubTab('section_a')}
-                  className="text-xs font-bold text-[#1e4b85] hover:underline flex items-center gap-1 cursor-pointer shrink-0 whitespace-nowrap"
-                >
-                  <Edit3 className="w-3.5 h-3.5" />
-                  <span>Sunting Manual Blok A–F</span>
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => setActiveSubTab('section_a')}
+                className="text-xs font-bold text-[#1e4b85] hover:underline flex items-center gap-1 cursor-pointer shrink-0 whitespace-nowrap"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>Sunting Manual Blok A–F</span>
+              </button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 text-xs">
