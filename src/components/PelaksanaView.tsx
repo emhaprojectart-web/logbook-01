@@ -102,6 +102,7 @@ export const PelaksanaView: React.FC<PelaksanaViewProps> = ({
   onNavigateToRiwayat
 }) => {
   const activeDateIso = shiftInfo?.date ? indonesianDateLabelToIso(shiftInfo.date) : '';
+
   return (
     <div className="w-full">
       <Logbook5ButtonsView

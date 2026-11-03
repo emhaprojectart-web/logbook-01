@@ -12,7 +12,7 @@ import {
   enableNetwork,
   setLogLevel
 } from 'firebase/firestore';
-import firebaseConfig from '../../firebase-applet-config.json';
+import rawConfig from '../../firebase-applet-config.json';
 import {
   PatientHDSession,
   ShiftInfo,
@@ -27,11 +27,24 @@ import {
   DoctorScheduleEntry
 } from '../types/dialysis.ts';
 
+// Dukungan Environment Variables untuk Vercel / deployment produksi dengan fallback ke firebase-applet-config.json
+const firebaseConfig = {
+  apiKey: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_API_KEY) || rawConfig.apiKey,
+  authDomain: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_AUTH_DOMAIN) || rawConfig.authDomain,
+  projectId: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_PROJECT_ID) || rawConfig.projectId,
+  storageBucket: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_STORAGE_BUCKET) || rawConfig.storageBucket,
+  messagingSenderId: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_MESSAGING_SENDER_ID) || rawConfig.messagingSenderId,
+  appId: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_APP_ID) || rawConfig.appId,
+  firestoreDatabaseId: (typeof import.meta !== 'undefined' && import.meta.env?.VITE_FIREBASE_DATABASE_ID) || rawConfig.firestoreDatabaseId
+};
+
 // Initialize Firebase App singleton
 export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
 // Initialize Firestore with custom databaseId
-export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+export const db = firebaseConfig.firestoreDatabaseId
+  ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+  : getFirestore(app);
 
 // Initialize Auth
 export const auth = getAuth(app);

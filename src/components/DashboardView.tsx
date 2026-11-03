@@ -75,8 +75,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [syncTick, setSyncTick] = useState<number>(0);
 
   useEffect(() => {
-    setSelectedMonth(runningDateParsed.month);
-    setSelectedYear(runningDateParsed.year);
+    setSelectedMonth((prev) => (prev === runningDateParsed.month ? prev : runningDateParsed.month));
+    setSelectedYear((prev) => (prev === runningDateParsed.year ? prev : runningDateParsed.year));
   }, [runningDateParsed.month, runningDateParsed.year]);
 
   useEffect(() => {
